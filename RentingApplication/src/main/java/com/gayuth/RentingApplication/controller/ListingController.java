@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/listings")
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("https://easygoing-enjoyment-production.up.railway.app")
 public class ListingController {
 
     @Autowired

@@ -1,0 +1,18 @@
+package com.gayuth.renting_app_backend.service;
+
+import com.gayuth.renting_app_backend.model.Seller;
+import com.gayuth.renting_app_backend.repository.SellerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class SellerService{
+    @Autowired
+    SellerRepository sellerRepository;
+
+    public List<Seller> getAllSellers() {
+        return sellerRepository.findAll();
+    }
+}

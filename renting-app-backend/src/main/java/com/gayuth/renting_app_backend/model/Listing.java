@@ -27,6 +27,7 @@ public class Listing {
     private Integer bathrooms;
     private Integer guests;
     @Column(name="property_type")
+    @Enumerated(EnumType.STRING)
     private PropertyType propertyType=PropertyType.SINGLE;
     @ManyToOne
     @JoinColumn(name="seller_id")

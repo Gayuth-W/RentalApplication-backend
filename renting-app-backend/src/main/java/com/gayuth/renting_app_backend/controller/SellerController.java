@@ -22,4 +22,11 @@ public class SellerController {
     public List<Seller> getAllSellers(){
         return sellerService.getAllSellers();
     }
+
+    @PostMapping("/register")
+    public Seller register(@RequestBody Seller seller) {
+        System.out.println(seller);
+        return sellerService.register(seller);
+
+    }
 }

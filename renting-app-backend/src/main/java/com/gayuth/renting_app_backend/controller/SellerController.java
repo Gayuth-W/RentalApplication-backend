@@ -29,4 +29,10 @@ public class SellerController {
         return sellerService.register(seller);
 
     }
+
+    @PostMapping("/login")
+    public String login(@RequestBody Seller seller) {
+
+        return sellerService.verify(seller);
+    }
 }

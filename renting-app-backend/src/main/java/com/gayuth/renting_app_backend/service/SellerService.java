@@ -14,8 +14,10 @@ import java.util.List;
 @Service
 public class SellerService{
     @Autowired
-    SellerRepository sellerRepository;
+    private SellerRepository sellerRepository;
 
+    @Autowired
+    private JWTService jwtService;
 
     @Autowired
     AuthenticationManager authManager;
@@ -34,7 +36,7 @@ public class SellerService{
     public String verify(Seller seller) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(seller.getEmail(), seller.getPassword()));
         if (authentication.isAuthenticated()) {
-            return "success"  ;
+            return jwtService.generateToken(seller.getEmail());
         } else {
             return "fail";
         }

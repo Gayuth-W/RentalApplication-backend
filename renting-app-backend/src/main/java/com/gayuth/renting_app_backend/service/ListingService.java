@@ -8,11 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ListingService {
-    @Autowired
-    private ListingRepository listingRepository;
-
-    public List<Listing> getAllListings(){
-        return listingRepository.findAll();
-    }
+public interface ListingService {
+    public List<Listing> getAllListings();
 }

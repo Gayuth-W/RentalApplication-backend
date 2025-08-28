@@ -1,4 +1,4 @@
-package com.gayuth.renting_app_backend.service;
+package com.gayuth.renting_app_backend.service.impl;
 
 import com.gayuth.renting_app_backend.model.Seller;
 import com.gayuth.renting_app_backend.model.SellerPrincipal;
@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
+public class MyUserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private SellerRepository sellerRepository;

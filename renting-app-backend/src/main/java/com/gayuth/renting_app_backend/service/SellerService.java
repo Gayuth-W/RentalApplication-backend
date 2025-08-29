@@ -9,6 +9,4 @@ import java.util.List;
 public interface SellerService{
 
     List<Seller> getAllSellers();
-    Seller register(Seller user);
-    String verify(Seller seller);
 }

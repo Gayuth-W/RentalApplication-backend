@@ -30,4 +30,7 @@ public class Seller {
     @Enumerated(EnumType.STRING)
     @Column(name="part")
     private UserRole role= UserRole.ROLE_SELLER;
+
+    @Column(nullable = false)
+    private boolean enabled = false;
 }

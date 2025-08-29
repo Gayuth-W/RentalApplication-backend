@@ -1,8 +1,10 @@
 package com.gayuth.renting_app_backend.service.impl;
 
+import com.gayuth.renting_app_backend.model.SellerPrincipal;
 import com.gayuth.renting_app_backend.service.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +21,8 @@ import java.util.function.Function;
 
 @Service
 public class JWTServiceImpl implements JWTService {
-    private String secretkey = "";
+    private String secretkey = "your-secret-key";
+    private final long EXPIRATION_TIME = 1000 * 60 * 60;
 
     public JWTServiceImpl() {
 
@@ -32,18 +35,17 @@ public class JWTServiceImpl implements JWTService {
         }
     }
 
-    public String generateToken(String username) {
+    public String generateToken(SellerPrincipal sellerPrincipal) {
         Map<String, Object> claims = new HashMap<>();
-        return Jwts.builder()
-                .claims()
-                .add(claims)
-                .subject(username)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 30))
-                .and()
-                .signWith(getKey())
-                .compact();
+        claims.put("role", "ROLE_SELLER"); // optional claim
 
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(sellerPrincipal.getUsername())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     private SecretKey getKey() {
@@ -80,5 +82,9 @@ public class JWTServiceImpl implements JWTService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public long getExpirationTime() {
+        return EXPIRATION_TIME;
     }
 }

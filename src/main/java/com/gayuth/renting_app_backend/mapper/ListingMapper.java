@@ -4,6 +4,10 @@ import com.gayuth.renting_app_backend.dto.DetailListingDTO;
 import com.gayuth.renting_app_backend.dto.HomeListingDTO;
 import com.gayuth.renting_app_backend.dto.SellerDTO;
 import com.gayuth.renting_app_backend.model.Listing;
+import com.gayuth.renting_app_backend.model.ListingImage;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ListingMapper {
     public static HomeListingDTO toHomeDTO(Listing listing){
@@ -20,6 +24,12 @@ public class ListingMapper {
                 listing.getSeller().getPhone()
         );
 
+        List<String> imageUrls = listing.getImages()
+                .stream()
+                .map(ListingImage::getUrl)
+                .map(ListingMapper::convertDriveLink)
+                .collect(Collectors.toList());
+
         return new DetailListingDTO(
                 listing.getId(),
                 listing.getTitle(),
@@ -31,7 +41,32 @@ public class ListingMapper {
                 listing.getBathrooms(),
                 listing.getGuests(),
                 listing.getPropertyType(),
-                sellerDTO
+                sellerDTO,
+                imageUrls
         );
+    }
+
+    private static String convertDriveLink(String url) {
+        if (url == null) return null;
+
+        String fileId = null;
+        String prefix = "/file/d/";
+        int start = url.indexOf(prefix);
+        if (start != -1) {
+            start += prefix.length();
+            int end = url.indexOf("/", start);
+            if (end != -1) {
+                fileId = url.substring(start, end);
+            } else {
+                fileId = url.substring(start);
+            }
+        }
+
+        if (fileId != null) {
+            System.out.println("https://drive.google.com/uc?export=view&id=" + fileId);
+            return "https://drive.google.com/uc?export=view&id=" + fileId;
+        } else {
+            return url;
+        }
     }
 }

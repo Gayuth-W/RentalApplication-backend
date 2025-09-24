@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -32,4 +36,8 @@ public class Listing {
     @ManyToOne
     @JoinColumn(name="seller_id")
     private Seller seller;
+
+    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<ListingImage> images = new ArrayList<>();
 }

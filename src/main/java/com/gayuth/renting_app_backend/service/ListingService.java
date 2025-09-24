@@ -1,5 +1,6 @@
 package com.gayuth.renting_app_backend.service;
 
+import com.gayuth.renting_app_backend.dto.CreateListingDTO;
 import com.gayuth.renting_app_backend.dto.DetailListingDTO;
 import com.gayuth.renting_app_backend.dto.HomeListingDTO;
 import com.gayuth.renting_app_backend.model.Listing;
@@ -14,4 +15,5 @@ public interface ListingService {
     List<HomeListingDTO> getAllListingsForHome();
     DetailListingDTO getListingDetails(Long id);
     Listing createListing(Listing listing);
+    Listing createListingWithImages(CreateListingDTO dto);
 }

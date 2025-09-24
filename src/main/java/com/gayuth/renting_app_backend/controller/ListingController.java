@@ -1,5 +1,6 @@
 package com.gayuth.renting_app_backend.controller;
 
+import com.gayuth.renting_app_backend.dto.CreateListingDTO;
 import com.gayuth.renting_app_backend.dto.DetailListingDTO;
 import com.gayuth.renting_app_backend.dto.HomeListingDTO;
 import com.gayuth.renting_app_backend.model.Listing;
@@ -27,7 +28,7 @@ public class ListingController {
     }
 
     @PostMapping("/post-listing")
-    public Listing createListing(@RequestBody Listing listing){
-        return listingService.createListing(listing);
+    public Listing createListing(@RequestBody CreateListingDTO dto){
+        return listingService.createListingWithImages(dto);
     }
 }

@@ -1,5 +1,6 @@
 package com.gayuth.renting_app_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class ListingImage {
 
     @ManyToOne(fetch = FetchType.LAZY) // many images can belong to one listing
     @JoinColumn(name = "listing_id", nullable = false, foreignKey = @ForeignKey(name = "fk_listing_image"))
+    @JsonBackReference
     private Listing listing;
 
     @Column(name = "url", nullable = false, length = 500)

@@ -1,5 +1,6 @@
 package com.gayuth.renting_app_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.gayuth.renting_app_backend.domain.PropertyType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,5 +40,6 @@ public class Listing {
 
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
+    @JsonManagedReference
     private List<ListingImage> images = new ArrayList<>();
 }

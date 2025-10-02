@@ -31,4 +31,9 @@ public class ListingController {
     public Listing createListing(@RequestBody CreateListingDTO dto){
         return listingService.createListingWithImages(dto);
     }
+
+    @GetMapping("/get-listing-seller-{id}")
+    public List<Listing> getListingBtSellerId(@PathVariable Long id){
+        return listingService.getListingBySeller(id);
+    }
 }

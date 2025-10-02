@@ -82,4 +82,9 @@ public class ListingServiceImpl implements ListingService {
 
         return savedListing;
     }
+
+    @Override
+    public List<Listing> getListingBySeller(Long id) {
+        return listingRepository.findBySellerId(id);
+    }
 }

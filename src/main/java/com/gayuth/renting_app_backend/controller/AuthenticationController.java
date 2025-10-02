@@ -35,9 +35,10 @@ public class AuthenticationController {
         SellerPrincipal sellerPrincipal = authService.authenticate(loginUserDto);
         String jwtToken = jwtService.generateToken(sellerPrincipal);
         long expirationTime = jwtService.getExpirationTime();
+        Long sellerId = sellerPrincipal.getId();
 
         // Return token and expiration
-        return ResponseEntity.ok(new LoginResponse(jwtToken, expirationTime));
+        return ResponseEntity.ok(new LoginResponse(jwtToken, expirationTime, sellerId));
     }
 
     @PostMapping("/verify")
@@ -62,5 +63,5 @@ public class AuthenticationController {
     }
 
     // Inner class for login response
-    public record LoginResponse(String token, long expiresAt) {}
+    public record LoginResponse(String token, long expiresAt, Long sellerId) {}
 }

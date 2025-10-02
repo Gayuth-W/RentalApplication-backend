@@ -6,9 +6,11 @@ import lombok.Data;
 public class LoginResponse {
     private String token;
     private long expiresIn;
+    private Long userId;
 
-    public LoginResponse(String token, long expiresIn) {
+    public LoginResponse(String token, long expiresIn, Long userId) {
         this.token = token;
         this.expiresIn = expiresIn;
+        this.userId = userId;
     }
 }

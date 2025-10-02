@@ -25,6 +25,10 @@ public class SellerPrincipal implements UserDetails {
         return seller.getPassword();
     }
 
+    public Long getId() {
+        return seller.getId();
+    }
+
     @Override
     public String getUsername() {
         return seller.getEmail();

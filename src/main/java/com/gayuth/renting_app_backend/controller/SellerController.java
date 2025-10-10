@@ -1,17 +1,12 @@
 package com.gayuth.renting_app_backend.controller;
 
-import com.gayuth.renting_app_backend.dto.RegisterDto;
 import com.gayuth.renting_app_backend.model.Seller;
-import com.gayuth.renting_app_backend.service.AuthService;
 import com.gayuth.renting_app_backend.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -23,5 +18,10 @@ public class SellerController {
     @GetMapping("/get-sellers")
     public List<Seller> getAllSellers(){
         return sellerService.getAllSellers();
+    }
+
+    @GetMapping("/get-seller/{id}")
+    public Optional<Seller> getSellerById(@PathVariable Long id){
+        return sellerService.getSellerById(id);
     }
 }

@@ -15,4 +15,5 @@ public interface ListingService {
     Listing createListing(Listing listing);
     Listing createListingWithImages(CreateListingDTO dto);
     List<Listing> getListingBySeller(Long id);
+    void deleteListingById(Long id);
 }

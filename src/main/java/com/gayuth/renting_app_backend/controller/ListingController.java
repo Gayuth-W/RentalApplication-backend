@@ -36,4 +36,9 @@ public class ListingController {
     public List<Listing> getListingBtSellerId(@PathVariable Long id){
         return listingService.getListingBySeller(id);
     }
+
+    @DeleteMapping("/delete-listing-{id}")
+    public void deleteListing(@PathVariable Long id){
+        listingService.deleteListingById(id);
+    }
 }

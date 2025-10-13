@@ -24,4 +24,9 @@ public class SellerController {
     public Optional<Seller> getSellerById(@PathVariable Long id){
         return sellerService.getSellerById(id);
     }
+
+    @DeleteMapping("/delete-seller-{id}")
+    public void deleteSellerById(@PathVariable Long id){
+        sellerService.deleteSellerById(id);
+    }
 }

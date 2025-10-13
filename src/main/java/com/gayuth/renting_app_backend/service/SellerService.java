@@ -11,4 +11,5 @@ public interface SellerService{
 
     List<Seller> getAllSellers();
     Optional<Seller> getSellerById(Long id);
+    void deleteSellerById(Long id);
 }

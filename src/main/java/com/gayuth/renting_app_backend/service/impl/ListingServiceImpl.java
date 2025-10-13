@@ -87,4 +87,9 @@ public class ListingServiceImpl implements ListingService {
     public List<Listing> getListingBySeller(Long id) {
         return listingRepository.findBySellerId(id);
     }
+
+    @Override
+    public void deleteListingById(Long id) {
+        listingRepository.deleteById(id);
+    }
 }

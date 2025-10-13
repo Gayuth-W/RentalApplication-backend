@@ -22,4 +22,9 @@ public class SellerServiceImpl implements SellerService {
     public Optional<Seller> getSellerById(Long id) {
         return sellerRepository.findById(id);
     }
+
+    @Override
+    public void deleteSellerById(Long id) {
+        sellerRepository.deleteById(id);
+    }
 }

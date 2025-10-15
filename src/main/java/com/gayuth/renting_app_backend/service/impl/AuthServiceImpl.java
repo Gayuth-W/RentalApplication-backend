@@ -3,6 +3,9 @@ package com.gayuth.renting_app_backend.service.impl;
 import com.gayuth.renting_app_backend.dto.LoginDto;
 import com.gayuth.renting_app_backend.dto.RegisterDto;
 import com.gayuth.renting_app_backend.dto.VerifyDto;
+import com.gayuth.renting_app_backend.exception.InvalidPasswordException;
+import com.gayuth.renting_app_backend.exception.UnverifiedAccountException;
+import com.gayuth.renting_app_backend.exception.UserNotFoundException;
 import com.gayuth.renting_app_backend.model.Seller;
 import com.gayuth.renting_app_backend.model.SellerPrincipal;
 import com.gayuth.renting_app_backend.model.VerificationCode;
@@ -14,7 +17,9 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.antlr.v4.runtime.misc.LogManager;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -57,19 +62,21 @@ public class AuthServiceImpl implements AuthService{
 
     public SellerPrincipal authenticate(LoginDto input) {
         Seller seller = sellerRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (!isSellerEnabled(seller))
-            throw new RuntimeException("Account not verified. Please verify your account.");
+            throw new UnverifiedAccountException("Account not verified. Please verify your account.");
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.getEmail(),
-                        input.getPassword()
-                )
-        );
+        try {
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())
+            );
+            // If we reach here, authentication succeeded
+            return (SellerPrincipal) auth.getPrincipal();
+        } catch (BadCredentialsException ex) {
+            throw new InvalidPasswordException("Password is incorrect");
+        }
 
-        return new SellerPrincipal(seller);
     }
 
     private boolean isSellerEnabled(Seller seller) {

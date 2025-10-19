@@ -92,4 +92,12 @@ public class ListingServiceImpl implements ListingService {
     public void deleteListingById(Long id) {
         listingRepository.deleteById(id);
     }
+
+    public List<Listing> searchListings(String keyword) {
+        return listingRepository.findByTitleContainingIgnoreCaseOrAboutContainingIgnoreCase(keyword, keyword);
+    }
+
+    public List<Listing> getAllListings() {
+        return listingRepository.findAll();
+    }
 }

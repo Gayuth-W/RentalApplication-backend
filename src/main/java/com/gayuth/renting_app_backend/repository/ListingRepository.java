@@ -13,5 +13,6 @@ import java.util.Optional;
 public interface ListingRepository extends JpaRepository<Listing,Long> {
     @Query("SELECT l FROM Listing l LEFT JOIN FETCH l.images WHERE l.id = :id")
     Optional<Listing> findByIdWithImages(@Param("id") Long id);
-   List<Listing> findBySellerId(Long SellerId);
+    List<Listing> findBySellerId(Long SellerId);
+    List<Listing> findByTitleContainingIgnoreCaseOrAboutContainingIgnoreCase(String title, String description);
 }

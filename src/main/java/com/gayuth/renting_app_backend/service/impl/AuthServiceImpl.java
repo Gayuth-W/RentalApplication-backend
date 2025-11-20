@@ -1,5 +1,6 @@
 package com.gayuth.renting_app_backend.service.impl;
 
+import com.gayuth.renting_app_backend.dto.ForgetPasswordDTO;
 import com.gayuth.renting_app_backend.dto.LoginDto;
 import com.gayuth.renting_app_backend.dto.RegisterDto;
 import com.gayuth.renting_app_backend.dto.VerifyDto;
@@ -35,7 +36,6 @@ public class AuthServiceImpl implements AuthService{
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
     private final VerificationCodeRepository verificationCodeRepository;
-
 
     public Seller signup(RegisterDto input) {
         Seller seller = new Seller();
@@ -89,7 +89,7 @@ public class AuthServiceImpl implements AuthService{
                 .findByEmailAndTokenAndUsedFalse(input.getEmail(), input.getVerificationCode());
 
         if (optionalCode.isEmpty())
-            throw new RuntimeException("Invalid or expired verification code");
+            throw new RuntimeException("Invalid code");
 
         VerificationCode code = optionalCode.get();
 
@@ -105,6 +105,45 @@ public class AuthServiceImpl implements AuthService{
         seller.setEnabled(true);
         sellerRepository.save(seller);
     }
+
+    @Override
+    public void verifyOldUser(String email) {
+        Seller seller =sellerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Seller Not found"));
+
+        VerificationCode code = new VerificationCode();
+        code.setSeller(seller);
+        code.setEmail(seller.getEmail());
+        code.setToken(generateVerificationCode());
+        code.setExpiry(LocalDateTime.now().plusMinutes(15));
+        code.setUsed(false);
+        code.setCreatedAt(LocalDateTime.now());
+        code.setType("RESET_PASSWORD");
+        verificationCodeRepository.save(code);
+
+        // Send email
+        sendVerificationEmail(code);
+    }
+
+    @Override
+    public void resetPassword(ForgetPasswordDTO forgetPasswordDTO) {
+        VerificationCode optionalCode = verificationCodeRepository
+                .findByEmailAndTokenAndUsedFalseAndType(forgetPasswordDTO.getEmail(), forgetPasswordDTO.getVerificationCode(), "RESET_PASSWORD")
+                .orElseThrow(() -> new RuntimeException("Invalid or expired verification code"));
+
+        Seller seller = sellerRepository.findByEmail(forgetPasswordDTO.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+        if (optionalCode.getExpiry().isBefore(LocalDateTime.now()))
+            throw new RuntimeException("Verification code expired");
+
+        optionalCode.setUsed(true);
+        seller.setPassword(passwordEncoder.encode(forgetPasswordDTO.getNewPassword()));
+        verificationCodeRepository.save(optionalCode);
+        sellerRepository.save(seller);
+    }
+
 
     public void resendVerificationCode(String email) {
         Seller seller = sellerRepository.findByEmail(email)

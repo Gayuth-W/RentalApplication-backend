@@ -1,10 +1,12 @@
 package com.gayuth.renting_app_backend.controller;
 
+import com.gayuth.renting_app_backend.dto.ForgetPasswordDTO;
 import com.gayuth.renting_app_backend.dto.LoginDto;
 import com.gayuth.renting_app_backend.dto.RegisterDto;
 import com.gayuth.renting_app_backend.dto.VerifyDto;
 import com.gayuth.renting_app_backend.model.Seller;
 import com.gayuth.renting_app_backend.model.SellerPrincipal;
+import com.gayuth.renting_app_backend.repository.SellerRepository;
 import com.gayuth.renting_app_backend.service.AuthService;
 import com.gayuth.renting_app_backend.service.JWTService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class AuthenticationController {
     private final JWTService jwtService;
     private final AuthService authService;
+    private final SellerRepository sellerRepository;
 
 
     @PostMapping("/signup")
@@ -62,6 +65,26 @@ public class AuthenticationController {
         }
     }
 
+    @PostMapping("/forget-password")
+    public ResponseEntity<?> forgetPassword(@RequestBody Map<String, String> body){
+        try{
+            String email = body.get("email");
+            authService.verifyOldUser(email);
+            return ResponseEntity.ok("Verification code sent");
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ForgetPasswordDTO forgetPasswordDTO){
+        try{
+            authService.resetPassword(forgetPasswordDTO);
+            return ResponseEntity.ok("Password Reset Successful");
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
     // Inner class for login response
     public record LoginResponse(String token, long expiresAt, Long sellerId) {}
 }

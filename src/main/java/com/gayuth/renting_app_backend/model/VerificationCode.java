@@ -37,4 +37,7 @@ public class VerificationCode {
     @Column(name = "created_at", nullable = false, updatable = false,
             columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
+
+    @Column(name="t_type", nullable=false)
+    private String type;
 }

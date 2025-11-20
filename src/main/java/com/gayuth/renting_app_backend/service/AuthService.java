@@ -1,5 +1,6 @@
 package com.gayuth.renting_app_backend.service;
 
+import com.gayuth.renting_app_backend.dto.ForgetPasswordDTO;
 import com.gayuth.renting_app_backend.dto.LoginDto;
 import com.gayuth.renting_app_backend.dto.RegisterDto;
 import com.gayuth.renting_app_backend.dto.VerifyDto;
@@ -13,4 +14,6 @@ public interface AuthService {
     SellerPrincipal authenticate(LoginDto input);
     void verifyUser(VerifyDto input);
     void resendVerificationCode(String email);
+    void verifyOldUser(String email);
+    void resetPassword(ForgetPasswordDTO forgetPasswordDTO);
 }

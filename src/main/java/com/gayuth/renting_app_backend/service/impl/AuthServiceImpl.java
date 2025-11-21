@@ -52,6 +52,7 @@ public class AuthServiceImpl implements AuthService{
         code.setToken(generateVerificationCode());
         code.setExpiry(LocalDateTime.now().plusMinutes(15));
         code.setUsed(false);
+        code.setType("SIGNUP");
         code.setCreatedAt(LocalDateTime.now());
         verificationCodeRepository.save(code);
 
